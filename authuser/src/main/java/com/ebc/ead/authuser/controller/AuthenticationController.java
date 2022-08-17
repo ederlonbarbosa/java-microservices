@@ -3,6 +3,7 @@ package com.ebc.ead.authuser.controller;
 import com.ebc.ead.authuser.dtos.UserDto;
 import com.ebc.ead.authuser.model.User;
 import com.ebc.ead.authuser.service.UserService;
+import com.fasterxml.jackson.annotation.JsonView;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
@@ -23,7 +24,7 @@ public class AuthenticationController {
     private final UserService userService;
 
     @PostMapping("/signup")
-    public ResponseEntity<Object> registerUser(@RequestBody UserDto userDto) {
+    public ResponseEntity<Object> registerUser(@RequestBody @JsonView(UserDto.UserView.RegistrationPost.class) UserDto userDto) {
         if (userService.existsByUsername(userDto.getUsername())) {
             log.error("Error: Username {} is Already Taken!", userDto.getUsername());
             return ResponseEntity.status(HttpStatus.CONFLICT).body("Error: Username is Already Taken!");
